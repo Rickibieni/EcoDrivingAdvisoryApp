@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "796672772",
+    "project_id": "ecodrivinguserdata-c1309",
+    "storage_bucket": "ecodrivinguserdata-c1309.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796672772:android:2dd21ded435ff1a1e60651",
+        "android_client_info": {
+          "package_name": "com.example.tutorialbuild"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlGEPS8m75A1omHvAgOA9wB1NLJNmTAGE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796672772:android:b52ca01692246c15e60651",
+        "android_client_info": {
+          "package_name": "com.example.tutorialBuild"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlGEPS8m75A1omHvAgOA9wB1NLJNmTAGE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
