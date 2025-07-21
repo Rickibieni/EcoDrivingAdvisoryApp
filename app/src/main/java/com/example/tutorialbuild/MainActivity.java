@@ -1,6 +1,8 @@
 package com.example.tutorialbuild;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.*;
 import android.view.View;
 import android.widget.*;
 
@@ -17,6 +19,12 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.json.*;
+
+import java.io.*;
+import java.net.*;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -103,12 +111,21 @@ public class MainActivity extends AppCompatActivity{
                     if (task.isSuccessful()) {
                         FirebaseUser user = mAuth.getCurrentUser();
                         Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
+
                         // TODO: Go to home screen or main activity
-//                        findViewById(R.id.loginLayout).setVisibility(View.GONE);
+                        Fragment hFrag = new HomeFragment();
+
+                        findViewById(R.id.loginLayout).setVisibility(View.GONE);
                         findViewById(R.id.fragment_container).setVisibility(View.VISIBLE);
-                        switchToFragment(new HomeFragment());
+                        Bundle bundle = new Bundle();
+                        bundle.putString("name", nameEditText.getText().toString());
+                        hFrag.setArguments(bundle);
+
+                        Log.d("debug", nameEditText.getText().toString());
+
+                        switchToFragment(hFrag);
                     } else {
-                        Toast.makeText(this, "Login failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Login failed: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
     }

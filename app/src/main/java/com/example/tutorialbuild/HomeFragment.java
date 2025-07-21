@@ -1,12 +1,24 @@
 package com.example.tutorialbuild;
 
 import android.os.Bundle;
+import android.os.AsyncTask;
 
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,6 +72,113 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        TextView fuelEfficiency = view.findViewById(R.id.fuelEfficiencyTxt);
+        TextView recommendations = view.findViewById(R.id.recommendationsTxt);
+        TextView welcomeText = view.findViewById(R.id.textView5);
+
+        FetchUsersTask fetcher = new FetchUsersTask(this);
+        fetcher.execute("http://192.168.1.42:5000/obd-data");
+
+        Bundle args = getArguments();
+        welcomeText.setText("Welcome, " + args.getString("name"));
+        welcomeText.setText("Welcome, " + args.getString("fuelEfficiency" + " l/100km"));
+        return view;
+    }
+}
+
+/**
+ * Allows for fetching of data
+ */
+class FetchUsersTask extends AsyncTask<String, Void, String> {
+
+    private Fragment fragment;
+
+    public FetchUsersTask(Fragment fragment){
+        this.fragment = fragment;
+    }
+
+    /**
+     * Does operations in background
+     *
+     * @param urls - the url that it is reading
+     * @return - The result in the url in a String format
+     */
+    @Override
+    protected String doInBackground(String... urls) {
+        String response = "";
+        try {
+            URL url = new URL(urls[0]);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+
+            InputStream in = new BufferedInputStream(conn.getInputStream());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            StringBuilder result = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                result.append(line);
+            }
+
+            response = result.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return response;
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+
+        // Runs on UI thread — can now safely update the UI
+        try {
+//            JSONArray jsonArray = new JSONArray(result);
+//            StringBuilder userNames = new StringBuilder();
+
+            String timestamp;
+            double speed;
+            double totalDistance;
+            double totalFuel;
+            double fuelEfficiency;
+
+            JSONObject user = new JSONObject(result);
+
+            timestamp = user.getString("timestamp");
+            speed = user.getDouble("speed_kph");
+            totalDistance = user.getDouble("total_distance_km");
+            totalFuel = user.getDouble("total_fuel_liters");
+            fuelEfficiency = user.getDouble("fuel_efficiency_l_per_100km");
+
+            Bundle bundle = new Bundle();
+            bundle.putString("timestamp", timestamp);
+            bundle.putDouble("speed_kph", speed);
+            bundle.putDouble("total_distance_km", totalDistance);
+            bundle.putDouble("total_fuel_liters", totalFuel);
+            bundle.putDouble("fuelEfficiency", fuelEfficiency);
+            fragment.setArguments(bundle);
+
+//            for (int i = 0; i < jsonArray.length(); i++) {
+//                JSONObject user = jsonArray.getJSONObject(i);
+//                timestamp = user.getString("timestamp");
+//                speed = user.getDouble("speed_kph");
+//                totalDistance = user.getDouble("total_distance_km");
+//                totalFuel = user.getDouble("total_fuel_liters");
+//                fuelEfficiency = user.getDouble("fuel_efficiency_l_per_100km");
+//            }
+
+            // TODO modifications of the information displayed on the website
+            //textViewResult.setText(userNames.toString());
+        } catch (JSONException e) {
+            // TODO errors display on any textview
+            //textViewResult.setText("Error parsing data.");
+            e.printStackTrace();
+        }
+    }
+
+    public void setFragment(Fragment frag){
+        this.fragment = frag;
     }
 }
