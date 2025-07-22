@@ -83,7 +83,8 @@ public class HomeFragment extends Fragment {
 
         Bundle args = getArguments();
         welcomeText.setText("Welcome, " + args.getString("name"));
-        welcomeText.setText("Welcome, " + args.getString("fuelEfficiency" + " l/100km"));
+        fuelEfficiency.setText("Fuel Efficiency: " + args.getString("fuelEfficiency") + " L / 100 km");
+
         return view;
     }
 }

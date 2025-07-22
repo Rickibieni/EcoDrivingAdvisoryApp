@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/filled_textbox"
         android:padding="12dp"
-        android:text="TextView"
+        android:text="Your recent acceleration rates have been higher than usual. This will reduce the fuel efficiency of your car in liters/100 km metrics. It may help to accelerate slower at an optimal time of 20km in 5 seconds. This will produce less emissions, use less fuel, and mitigates the chances of hard stops and accidents."
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
